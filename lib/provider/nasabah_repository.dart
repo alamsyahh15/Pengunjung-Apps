@@ -81,6 +81,26 @@ class NasabahRepo {
     }
   }
 
+  static Future deleteNasabah(Nasabah nasabah) async {
+    try {
+      final data = nasabah.toJson();
+
+      final res = await dio.post(
+        "$apiUrl" + "deleteNasabah",
+        data: FormData.fromMap(data),
+      );
+
+      print("Data ${jsonDecode(res.data)}");
+      if (res.statusCode == 200) {
+        if (jsonDecode(res.data)['status'] == true) {
+          return nasabahModelFromJson(res.data).status;
+        }
+      }
+    } catch (e) {
+      print("Exception $e");
+    }
+  }
+
   static Future getNasabah() async {
     try {
       final res = await dio.get("$apiUrl" + "getNasabah");

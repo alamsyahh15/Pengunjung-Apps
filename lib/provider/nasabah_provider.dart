@@ -153,6 +153,49 @@ class NasabahProvider extends ChangeNotifier {
     }
   }
 
+  void deleteNasabah(context, Nasabah nasabah) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(
+          "Apakah anda yakin menghapus data ini ?",
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+        ),
+        content: Text(
+          "Peringatan data ini akan di hapus secara permanent dan tidak akan bisa di kembalikan lagi",
+          style: TextStyle(fontSize: 13),
+        ),
+        actions: [
+          MaterialButton(
+            child: Text("No"),
+            onPressed: () async {
+              Navigator.pop(context);
+            },
+          ),
+          MaterialButton(
+            child: Text("Yes"),
+            onPressed: () async {
+              progressDialog(context);
+              final res = await NasabahRepo.deleteNasabah(nasabah);
+              Navigator.pop(context);
+              if (res != null) {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              } else {
+                dialogData(
+                  context,
+                  "Attention!!",
+                  "Gagal delete data pengunjung",
+                  onBack: () {},
+                );
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   void updateStatus(context, Nasabah nasabah) async {
     showDialog(
       context: context,
@@ -181,9 +224,7 @@ class NasabahProvider extends ChangeNotifier {
                   context,
                   "Attention!!",
                   "Gagal update status pengunjung",
-                  onBack: () {
-                    Navigator.pop(context);
-                  },
+                  onBack: () {},
                 );
               }
             },
@@ -203,9 +244,7 @@ class NasabahProvider extends ChangeNotifier {
                   context,
                   "Attention!!",
                   "Gagal update status pengunjung",
-                  onBack: () {
-                    Navigator.pop(context);
-                  },
+                  onBack: () {},
                 );
               }
             },
@@ -215,7 +254,7 @@ class NasabahProvider extends ChangeNotifier {
     );
   }
 
-  dialogData(BuildContext context, String title, String content,
+  void dialogData(BuildContext context, String title, String content,
       {Function() onBack}) {
     showDialog(
       context: context,

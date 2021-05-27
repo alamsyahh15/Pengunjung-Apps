@@ -412,7 +412,9 @@ class _AddNasabahPageState extends State<AddNasabahPage> {
                           color: Colors.red,
                           child: Text("Delete"),
                           textColor: Colors.white,
-                          onPressed: () {},
+                          onPressed: () {
+                            provider.deleteNasabah(context, dataNasabah);
+                          },
                         ),
                       ),
                     ),
